@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc
-from base import WindowReaderBase
+from .base import WindowReaderBase
 
 class ContextMenuReader(WindowReaderBase):
     ID = 'contextmenu'

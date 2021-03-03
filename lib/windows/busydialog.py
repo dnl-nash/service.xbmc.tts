@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from base import WindowReaderBase
+from .base import WindowReaderBase
 from lib import util
 
 class BusyDialogReader(WindowReaderBase):
@@ -16,7 +16,7 @@ class BusyDialogReader(WindowReaderBase):
         
     def getMonitoredText(self,isSpeaking=False):
         now = time.time()
-        if now > self.next:
+        if now > self.__next__:
             self.play()
             
     def close(self):

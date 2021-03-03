@@ -1,4 +1,4 @@
-import sys, re, xbmc, xbmcgui, time, Queue
+import sys, re, xbmc, xbmcgui, time, queue
 import json
 from lib import util, addoninfo
 T = util.T
@@ -34,7 +34,7 @@ class TTSService(xbmc.Monitor):
         self.readerOn = True
         self.stop = False
         self.disable = False
-        self.noticeQueue = Queue.Queue()
+        self.noticeQueue = queue.Queue()
         self.initState()
         self._tts = None
         self.backendProvider = None
@@ -122,11 +122,11 @@ class TTSService(xbmc.Monitor):
 
     def onDatabaseScanStarted(self,database):
         util.LOG('DB SCAN STARTED: {0} - Notifying...'.format(database))
-        self.queueNotice(u'{0}: {1}'.format(database,T(32100)))
+        self.queueNotice('{0}: {1}'.format(database,T(32100)))
 
     def onDatabaseUpdated(self,database):
         util.LOG('DB SCAN UPDATED: {0} - Notifying...'.format(database))
-        self.queueNotice(u'{0}: {1}'.format(database,T(32101)))
+        self.queueNotice('{0}: {1}'.format(database,T(32101)))
 
     def onNotification(self, sender, method, data):
         if not sender == 'service.xbmc.tts': return
@@ -135,7 +135,7 @@ class TTSService(xbmc.Monitor):
 #        #xbmc :: VideoLibrary.OnUpdate :: {"item":{"id":1418,"type":"episode"}}
 
     def queueNotice(self,text,interrupt=False):
-        assert isinstance(text,unicode), "Not Unicode"
+        assert isinstance(text,str), "Not Unicode"
         self.noticeQueue.put((text,interrupt))
 
     def clearNoticeQueue(self):
@@ -143,7 +143,7 @@ class TTSService(xbmc.Monitor):
             while not self.noticeQueue.empty():
                 self.noticeQueue.get()
                 self.noticeQueue.task_done()
-        except Queue.Empty:
+        except queue.Empty:
             return
 
     def checkNoticeQueue(self):
@@ -162,8 +162,8 @@ class TTSService(xbmc.Monitor):
         self.text = None
         self.textCompare = None
         self.secondaryText = None
-        self.keyboardText = u''
-        self.progressPercent = u''
+        self.keyboardText = ''
+        self.progressPercent = ''
         self.lastProgressPercentUnixtime = 0
         self.interval = 400
         self.listIndex = None
@@ -183,7 +183,7 @@ class TTSService(xbmc.Monitor):
         util.LOG('Backend falling back to: {0}'.format(backend.provider))
         self.initTTS(backend)
         self.sayText(T(32102).format(backend.displayName),interrupt=True)
-        if reason: self.sayText(u'{0}: {1}'.format(T(32103),reason),interrupt=False)
+        if reason: self.sayText('{0}: {1}'.format(T(32103),reason),interrupt=False)
 
     def checkNewVersion(self):
         try:
@@ -212,7 +212,7 @@ class TTSService(xbmc.Monitor):
             self.firstRun()
             return True
         elif LooseVersion(lastVersion) < LooseVersion(__version__):
-            self.queueNotice(u'{0}... {1}'.format(T(32104),__version__))
+            self.queueNotice('{0}... {1}'.format(T(32104),__version__))
             return True
         return False
 
@@ -251,7 +251,7 @@ class TTSService(xbmc.Monitor):
                         text, interrupt = self.noticeQueue.get_nowait()
                         self.sayText(text,interrupt)
                         self.noticeQueue.task_done()
-                    except Queue.Empty:
+                    except queue.Empty:
                         pass
                     except RuntimeError:
                         util.ERROR('start()',hide_tb=True)
@@ -332,7 +332,7 @@ class TTSService(xbmc.Monitor):
         if not monitored:
             monitored = self.windowReader.getMonitoredText(self.tts.isSpeaking())
         if monitored:
-            if isinstance(monitored,basestring):
+            if isinstance(monitored,str):
                 self.sayText(monitored,interrupt=True)
             else:
                 self.sayTexts(monitored,interrupt=True)
@@ -362,14 +362,14 @@ class TTSService(xbmc.Monitor):
         self.sayTexts(texts,interrupt=interrupt)
 
     def sayText(self,text,interrupt=False):
-        assert isinstance(text,unicode), "Not Unicode"
+        assert isinstance(text,str), "Not Unicode"
         if self.tts.dead: return self.fallbackTTS(self.tts.deadReason)
         util.VERBOSE_LOG(repr(text))
         self.tts.say(self.cleanText(text),interrupt)
 
     def sayTexts(self,texts,interrupt=True):
         if not texts: return
-        assert all(isinstance(t,unicode) for t in texts), "Not Unicode"
+        assert all(isinstance(t,str) for t in texts), "Not Unicode"
         if self.tts.dead: return self.fallbackTTS(self.tts.deadReason)
         util.VERBOSE_LOG(repr(texts))
         self.tts.sayList(self.cleanText(texts),interrupt=interrupt)
@@ -414,10 +414,10 @@ class TTSService(xbmc.Monitor):
 
         name = self.windowReader.getName()
         if name:
-            self.sayText(u'{0}: {1}'.format(T(32105),name),interrupt=not newN)
+            self.sayText('{0}: {1}'.format(T(32105),name),interrupt=not newN)
             self.insertPause()
         else:
-            self.sayText(u' ',interrupt=not newN)
+            self.sayText(' ',interrupt=not newN)
 
         heading = self.windowReader.getHeading()
         if heading:
@@ -454,12 +454,12 @@ class TTSService(xbmc.Monitor):
     def newText(self,compare,text,newD,secondary=None):
         self.textCompare = compare
         label2 = xbmc.getInfoLabel('Container({0}).ListItem.Label2'.format(self.controlID)).decode('utf-8')
-        seasEp = xbmc.getInfoLabel('Container({0}).ListItem.Property(SeasonEpisode)'.format(self.controlID)).decode('utf-8') or u''
+        seasEp = xbmc.getInfoLabel('Container({0}).ListItem.Property(SeasonEpisode)'.format(self.controlID)).decode('utf-8') or ''
         if label2 and seasEp:
-                text = u'{0}: {1}: {2} '.format(label2, text,self.formatSeasonEp(seasEp))
+                text = '{0}: {1}: {2} '.format(label2, text,self.formatSeasonEp(seasEp))
         if secondary:
             self.secondaryText = secondary
-            text += self.tts.pauseInsert + u' ' + secondary
+            text += self.tts.pauseInsert + ' ' + secondary
         self.sayText(text,interrupt=not newD)
         if self.autoItemExtra:
             self.waitingToReadItemExtra = time.time()
@@ -467,12 +467,12 @@ class TTSService(xbmc.Monitor):
     def newSecondaryText(self, text):
         self.secondaryText = text
         if not text: return
-        if text.endswith('%'): text = text.rsplit(u' ',1)[-1] #Get just the percent part, so we don't keep saying downloading
+        if text.endswith('%'): text = text.rsplit(' ',1)[-1] #Get just the percent part, so we don't keep saying downloading
         if not self.tts.isSpeaking(): self.sayText(text,interrupt=True)
 
     def formatSeasonEp(self,seasEp):
-        if not seasEp: return u''
-        return seasEp.replace(u'S',u'{0} '.format(T(32108))).replace(u'E',u'{0} '.format(T(32109)))
+        if not seasEp: return ''
+        return seasEp.replace('S','{0} '.format(T(32108))).replace('E','{0} '.format(T(32109)))
 
     _formatTagRE = re.compile(r'\[/?(?:CR|B|I|UPPERCASE|LOWERCASE)\](?i)')
     _colorTagRE = re.compile(r'\[/?COLOR[^\]\[]*?\](?i)')
@@ -487,7 +487,7 @@ class TTSService(xbmc.Monitor):
         return text
 
     def cleanText(self,text):
-        if isinstance(text,basestring):
+        if isinstance(text,str):
             return self._cleanText(text)
         else:
             return [self._cleanText(t) for t in text]

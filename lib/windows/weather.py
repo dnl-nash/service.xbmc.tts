@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from base import WindowReaderBase, parseItemExtra
+from .base import WindowReaderBase, parseItemExtra
 import xbmc
-import windowparser
+from . import windowparser
 
 class WeatherReader(WindowReaderBase):
     ID = 'weather'
@@ -17,7 +17,7 @@ class WeatherReader(WindowReaderBase):
         return parseItemExtra(controlID, self.getControlText(controlID)[0])
         
     def getControlText(self,controlID):
-        if not controlID: return (u'',u'')
+        if not controlID: return ('','')
         text = xbmc.getInfoLabel('System.CurrentControl')
-        if not text: return (u'',u'')
+        if not text: return ('','')
         return (text.decode('utf-8'),text)

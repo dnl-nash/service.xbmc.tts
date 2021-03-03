@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import xbmc, time
-from base import WindowReaderBase
-import guitables
+from .base import WindowReaderBase
+from . import guitables
 
 class ProgressDialogReader(WindowReaderBase):
     ID = 'progressdialog'
@@ -10,7 +10,7 @@ class ProgressDialogReader(WindowReaderBase):
         self.progressPercent = -1
 
     def getHeading(self):
-        return xbmc.getInfoLabel('Control.GetLabel(1)').decode('utf-8') or u''
+        return xbmc.getInfoLabel('Control.GetLabel(1)').decode('utf-8') or ''
 
     def getWindowTexts(self): return guitables.convertTexts(self.winID,('2','3','4','9')) #1,2,3=Older Skins 9=Newer Skins
             
@@ -26,4 +26,4 @@ class ProgressDialogReader(WindowReaderBase):
         elif isSpeaking:
             return
         self.progressPercent = progress
-        return u'%s%%' % progress
+        return '%s%%' % progress

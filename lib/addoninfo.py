@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, hashlib, json
 import xbmc
-import util
+from . import util
 
 DATAPATH = os.path.join(util.profileDirectory(),'addon_data.json')
 BASE = '{ "jsonrpc": "2.0", "id": 1, "method": "Addons.GetAddons", "params": {"enabled": true,"properties": ["name","version"]}}'
@@ -26,14 +26,14 @@ def initAddonsData(force=False):
     
 def getAddonsDetails():
     data = json.loads(xbmc.executeJSONRPC(BASE))
-    details = data[u'result'][u'addons']
+    details = data['result']['addons']
     return details
 
 def loadAddonsDetails(as_dict=False):
     if not os.path.exists(DATAPATH): return None
     with open(DATAPATH,'r') as f:
         data = json.load(f)
-    detailsList = data[u'result'][u'addons']
+    detailsList = data['result']['addons']
     if as_dict:  return dict((d['addonid'],d) for d in detailsList)
     return detailsList
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import xbmc
-from base import WindowReaderBase
-import guitables
+from .base import WindowReaderBase
+from . import guitables
 
 class YesNoDialogReader(WindowReaderBase):
     ID = 'yesnodialog'

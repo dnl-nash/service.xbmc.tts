@@ -43,7 +43,7 @@ winNames = {    10000: 10000, #Home
                 10107: T(32129), #info dialog
                 10109: T(32130), #numeric input
                 10111: T(32131), #shutdown menu
-                10113: u'mute bug',
+                10113: 'mute bug',
                 10114: T(32132), #player controls
                 10115: T(32133), #seek bar
                 10120: T(32134), #music OSD
@@ -179,7 +179,7 @@ def getItemExtraTexts(winID):
 def getListItemProperty(winID):
     texts = getWindowTexts(winID,table=winListItemProperties)
     if not texts: return None
-    return u','.join(texts)
+    return ','.join(texts)
 
 def getSongInfo():
     if xbmc.getCondVisibility('ListItem.IsFolder'): return None

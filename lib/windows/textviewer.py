@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc, time, re, hashlib
-from base import WindowReaderBase
+from .base import WindowReaderBase
 
 class TextViewerReader(WindowReaderBase):
     ID = 'textviewer'
@@ -48,7 +48,7 @@ class TextViewerReader(WindowReaderBase):
         return None
 
     def getControlText(self,controlID):
-        return (u'',u'')
+        return ('','')
 
     def getMonitoredText(self,isSpeaking=False):
         if self.doubleChecked: return None

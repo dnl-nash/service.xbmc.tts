@@ -4,7 +4,7 @@ from threading import Timer
 import xbmc
 import xbmcgui
 import xbmcaddon
-import util
+from . import util
 T = util.T
 
 ACTIONS = (
@@ -69,7 +69,7 @@ def loadCustomKeymapDefs():
 
 def saveCustomKeymapDefs(defs):
     out = ''
-    for k, v in defs.items():
+    for k, v in list(defs.items()):
         out += '{0}={1}\n'.format(k, v)
     path = _keyMapDefsPath()
     with open(path, 'w') as f:
@@ -173,7 +173,7 @@ def editKey(key_id, defs):
     key = KeyListener.record_key()
     if not key:
         return
-    util.notifySayText(u'Key set', interrupt=True)
+    util.notifySayText('Key set', interrupt=True)
     defs[key_id] = key
     saveCustomKeymapDefs(defs)
 

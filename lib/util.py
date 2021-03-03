@@ -17,13 +17,13 @@ def ERROR(txt,hide_tb=False,notify=False):
     if hide_tb:
         LOG('ERROR: {0} - {1}'.format(txt,short))
         return short
-    print "_________________________________________________________________________________"
+    print("_________________________________________________________________________________")
     LOG('ERROR: ' + txt)
     import traceback
     tb = traceback.format_exc()
-    for l in tb.splitlines(): print '    ' + l
-    print "_________________________________________________________________________________"
-    print "`"
+    for l in tb.splitlines(): print('    ' + l)
+    print("_________________________________________________________________________________")
+    print("`")
     if notify: showNotification('ERROR: {0}'.format(short))
     return short
 
@@ -255,7 +255,7 @@ def busyDialog(func):
 
 @busyDialog
 def selectBackend():
-    import backends
+    from . import backends
     import xbmcgui
     choices = ['auto']
     display = [T(32184)]
@@ -270,7 +270,7 @@ def selectBackend():
 @busyDialog
 def selectPlayer(provider):
     import xbmcgui
-    import backends
+    from . import backends
     players = backends.getPlayers(provider)
     if not players:
         xbmcgui.Dialog().ok(T(32182),T(32183))
@@ -287,7 +287,7 @@ def selectPlayer(provider):
 @busyDialog
 def selectSetting(provider,setting,*args):
     import xbmcgui
-    import backends
+    from . import backends
     settingsList = backends.getSettingsList(provider,setting,*args)
     if not settingsList:
         xbmcgui.Dialog().ok(T(32182),T(32186))
@@ -317,7 +317,7 @@ def safeDecode(enc_text):
     return binascii.unhexlify(enc_text).decode('utf-8')
 
 def notifySayText(text,interrupt=False):
-    assert isinstance(text,unicode), "Not Unicode"
+    assert isinstance(text,str), "Not Unicode"
     command = BASE_COMMAND.format(safeEncode(text),repr(interrupt).lower())
     #print command
     xbmc.executebuiltin(command)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc, re, difflib, time
-from base import WindowReaderBase
+from .base import WindowReaderBase
 from lib import util
 class VirtualKeyboardReader(WindowReaderBase):
     ID = 'virtualkeyboard'
@@ -59,10 +59,10 @@ class VirtualKeyboardReader(WindowReaderBase):
             elif len(text) > len(self.keyboardText):
                 for c in d.compare(self.keyboardText,text):
                     if c.startswith('+'):
-                        out += u' ' + (c.strip(' +') or util.T(32177))
+                        out += ' ' + (c.strip(' +') or util.T(32177))
             else:
                 for c in d.compare(self.keyboardText,text):
-                    if c.startswith('-'): out += u' ' + (c.strip(' -') or util.T(32177))
+                    if c.startswith('-'): out += ' ' + (c.strip(' -') or util.T(32177))
                 if out: out = out.strip() + ' {0}'.format(util.T(32179))
             self.keyboardText = text
             if out:

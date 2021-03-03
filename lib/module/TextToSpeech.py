@@ -10,7 +10,7 @@ def safeDecode(enc_text):
     return binascii.unhexlify(enc_text).decode('utf-8')
 
 def sayText(text,interrupt=False):
-    assert isinstance(text,unicode), "Not Unicode"
+    assert isinstance(text,str), "Not Unicode"
     command = BASE_COMMAND.format(safeEncode(text),repr(interrupt).lower())
     #print command
     xbmc.executebuiltin(command)
