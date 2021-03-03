@@ -37,15 +37,15 @@ def processCommand(command):
 
 
 def _keymapTarget():
-    return os.path.join(xbmc.translatePath('special://userdata').decode('utf-8'), 'keymaps', 'service.xbmc.tts.keyboard.xml')
+    return os.path.join(xbmc.translatePath('special://userdata'), 'keymaps', 'service.xbmc.tts.keyboard.xml')
 
 
 def _keymapSource(kind='base'):
-    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('path')).decode('utf-8'), 'resources', 'keymap.{0}.xml'.format(kind))
+    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('path')), 'resources', 'keymap.{0}.xml'.format(kind))
 
 
 def _keyMapDefsPath():
-    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('profile')).decode('utf-8'), 'custom.keymap.defs')
+    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('profile')), 'custom.keymap.defs')
 
 
 def loadCustomKeymapDefs():

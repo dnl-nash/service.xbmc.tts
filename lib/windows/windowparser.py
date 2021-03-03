@@ -45,7 +45,7 @@ infoLableRE = re.compile(r'\$INFO\[([^\]]*)\]')
 def getInfoLabel(info,container):
     if container:
         info = info.replace('ListItem.','Container({0}).ListItem.'.format(container))
-    return xbmc.getInfoLabel(info).decode('utf-8')
+    return xbmc.getInfoLabel(info)
 
 def nodeParents(dom,node):
     parents = []
@@ -119,7 +119,7 @@ class WindowParser:
             xpath.findnode('..',i).replaceChild(new,i)
 
     def addonReplacer(self,m):
-        return xbmc.getInfoLabel(m.group(0)).decode('utf-8')
+        return xbmc.getInfoLabel(m.group(0))
 
     def variableReplace(self,m):
         return self.includes.getVariable(m.group(1))
@@ -144,7 +144,7 @@ class WindowParser:
         text = None
         if label.attributes.get('id'):
             #Try getting programatically set label first.
-            text = xbmc.getInfoLabel('Control.GetLabel({0})'.format(label.attributes.get('id').value)).decode('utf-8')
+            text = xbmc.getInfoLabel('Control.GetLabel({0})'.format(label.attributes.get('id').value))
         if not text or text == '-':
             text = None
             if l and l.childNodes: text = l.childNodes[0].data

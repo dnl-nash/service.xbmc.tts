@@ -12,11 +12,11 @@ class SettingsReader(WindowReaderBase):
     def getItemExtraTexts(self,controlID):
         text = xbmc.getInfoLabel('Container({0}).ListItem.Label2'.format(controlID))
         if not text: return None
-        return [text.decode('utf-8')]
+        return [text]
 
     def getControlText(self,controlID):
         if not controlID: return ('','')
         sub = ''
         text = self.getSettingControlText(controlID)
         if text.startswith('-'): sub = '{0}: '.format(util.T(32172))
-        return ('{0}{1}'.format(sub,text.decode('utf-8')),text)
+        return ('{0}{1}'.format(sub,text),text)

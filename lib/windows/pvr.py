@@ -48,7 +48,7 @@ class PVRGuideWindowReader(PVRWindowReaderBase):
         text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.StartTime') + xbmc.getInfoLabel('ListItem.EndTime')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getItemExtraTexts(self,controlID):
         text = None
@@ -79,7 +79,7 @@ class PVRChannelsWindowReader(PVRWindowReaderBase):
         text = '{0}... {1}... {2}'.format(xbmc.getInfoLabel('ListItem.ChannelNumber'),xbmc.getInfoLabel('ListItem.Label'),xbmc.getInfoLabel('ListItem.Title'))
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.StartTime') + xbmc.getInfoLabel('ListItem.EndTime')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getItemExtraTexts(self,controlID):
         text = None
@@ -99,7 +99,7 @@ class PVRRecordingsWindowReader(PVRWindowReaderBase):
         if self.slideoutHasFocus(): return self.getSlideoutText(controlID)
         text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
-        return (text.decode('utf-8'),text)
+        return (text,text)
 
     def getItemExtraTexts(self,controlID):
         text = None
@@ -122,7 +122,7 @@ class PVRTimersWindowReader(PVRWindowReaderBase):
         text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.StartTime') + xbmc.getInfoLabel('ListItem.EndTime')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getItemExtraTexts(self,controlID):
         text = None
@@ -144,7 +144,7 @@ class PVRSearchWindowReader(PVRWindowReaderBase):
         text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.Date')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getItemExtraTexts(self,controlID):
         text = None
@@ -193,7 +193,7 @@ class PVRWindowReader(PVRWindowReaderBase):
             text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.StartTime') + xbmc.getInfoLabel('ListItem.EndTime')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getItemExtraTexts(self,controlID):
         text = None

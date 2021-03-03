@@ -3,7 +3,7 @@ import os, sys, xbmc
 
 
 def main():
-    if os.path.exists(os.path.join(xbmc.translatePath('special://profile').decode('utf-8'), 'addon_data', 'service.xbmc.tts', 'DISABLED')):
+    if os.path.exists(os.path.join(xbmc.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'DISABLED')):
         xbmc.log('service.xbmc.tts: DISABLED - NOT STARTING')
         return
 

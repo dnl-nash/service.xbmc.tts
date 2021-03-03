@@ -20,4 +20,4 @@ class WeatherReader(WindowReaderBase):
         if not controlID: return ('','')
         text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
-        return (text.decode('utf-8'),text)
+        return (text,text)

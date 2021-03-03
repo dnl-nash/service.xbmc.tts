@@ -8,7 +8,7 @@ BASE = '{ "jsonrpc": "2.0", "id": 1, "method": "Addons.GetAddons", "params": {"e
 NEW_VERSIONS = False
 
 def getAddonsMD5():
-    return hashlib.md5(xbmc.executeJSONRPC(BASE)).hexdigest()
+    return hashlib.md5(xbmc.executeJSONRPC(BASE).encode('utf-8')).hexdigest()
 
 def saveAddonsMD5(md5):
     util.setSetting('addons_MD5',md5)

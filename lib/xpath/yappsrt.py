@@ -2,7 +2,7 @@
 #
 # This module is needed to run generated parsers.
 
-from string import join, count, find, rfind
+#from string import join, count, find, rfind
 import re
 
 class SyntaxError(Exception):
@@ -83,7 +83,7 @@ class Scanner:
             if best_pat == '(error)' and best_match < 0:
                 msg = "Bad Token"
                 if restrict:
-                    msg = "Trying to find one of "+join(restrict,", ")
+                    msg = "Trying to find one of "+str.join(restrict,", ")
                 raise SyntaxError(self.pos, msg)
     
             # If we found something that isn't to be ignored, return it
@@ -127,23 +127,23 @@ def print_error(input, err, scanner):
     """This is a really dumb long function to print error messages nicely."""
     p = err.pos
     # Figure out the line number
-    line = count(input[:p], '\n')
+    line = str.count(input[:p], '\n')
     print(err.msg+" on line "+repr(line+1)+":")
     # Now try printing part of the line
     text = input[max(p-80, 0):p+80]
     p = p - max(p-80, 0)
 
     # Strip to the left
-    i = rfind(text[:p], '\n')
-    j = rfind(text[:p], '\r')
+    i = str.rfind(text[:p], '\n')
+    j = str.rfind(text[:p], '\r')
     if i < 0 or (0 <= j < i): i = j
     if 0 <= i < p:
         p = p - i - 1
         text = text[i+1:]
 
     # Strip to the right
-    i = find(text,'\n', p)
-    j = find(text,'\r', p)
+    i = str.find(text,'\n', p)
+    j = str.find(text,'\r', p)
     if i < 0 or (0 <= j < i): i = j
     if i >= 0:
         text = text[:i]
@@ -168,7 +168,7 @@ def wrap_error_reporter(parser, rule):
         try:
             print_error(input, s, parser._scanner)
         except ImportError:
-            print('Syntax Error',s.msg,'on line',1+count(input[:s.pos], '\n'))
+            print('Syntax Error',s.msg,'on line',1+str.count(input[:s.pos], '\n'))
     except NoMoreTokens:
         print('Could not complete parsing; stopped around here:')
         print(parser._scanner)

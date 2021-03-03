@@ -155,7 +155,7 @@ class TTSService(xbmc.Monitor):
         return True
 
     def initState(self):
-        if xbmc.abortRequested or self.stop: return
+        if xbmc.Monitor().abortRequested() or self.stop: return
         self.winID = None
         self.windowReader = None
         self.controlID = None
@@ -225,9 +225,9 @@ class TTSService(xbmc.Monitor):
     def start(self):
         self.checkNewVersion()
         try:
-            while (not xbmc.abortRequested) and (not self.stop):
+            while (not xbmc.Monitor().abortRequested()) and (not self.stop):
                 #Interface reader mode
-                while self.readerOn and (not xbmc.abortRequested) and (not self.stop):
+                while self.readerOn and (not xbmc.Monitor().abortRequested()) and (not self.stop):
                     xbmc.sleep(self.interval)
                     try:
                         self.checkForText()
@@ -246,7 +246,7 @@ class TTSService(xbmc.Monitor):
                         self.initState() #To help keep errors from repeating on the loop
 
                 #Idle mode
-                while (not self.readerOn) and (not xbmc.abortRequested) and (not self.stop):
+                while (not self.readerOn) and (not xbmc.Monitor().abortRequested()) and (not self.stop):
                     try:
                         text, interrupt = self.noticeQueue.get_nowait()
                         self.sayText(text,interrupt)
@@ -453,8 +453,8 @@ class TTSService(xbmc.Monitor):
 
     def newText(self,compare,text,newD,secondary=None):
         self.textCompare = compare
-        label2 = xbmc.getInfoLabel('Container({0}).ListItem.Label2'.format(self.controlID)).decode('utf-8')
-        seasEp = xbmc.getInfoLabel('Container({0}).ListItem.Property(SeasonEpisode)'.format(self.controlID)).decode('utf-8') or ''
+        label2 = xbmc.getInfoLabel('Container({0}).ListItem.Label2'.format(self.controlID))
+        seasEp = xbmc.getInfoLabel('Container({0}).ListItem.Property(SeasonEpisode)'.format(self.controlID)) or ''
         if label2 and seasEp:
                 text = '{0}: {1}: {2} '.format(label2, text,self.formatSeasonEp(seasEp))
         if secondary:

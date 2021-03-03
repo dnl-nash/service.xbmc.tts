@@ -4,10 +4,10 @@ import xbmc,binascii
 BASE_COMMAND = 'XBMC.NotifyAll(service.xbmc.tts,SAY,"{{\\"text\\":\\"{0}\\",\\"interrupt\\":{1}}}")'
 
 def safeEncode(text):
-    return binascii.hexlify(text.encode('utf-8'))
+    return binascii.hexlify(text)
 
 def safeDecode(enc_text):
-    return binascii.unhexlify(enc_text).decode('utf-8')
+    return binascii.unhexlify(enc_text)
 
 def sayText(text,interrupt=False):
     assert isinstance(text,str), "Not Unicode"

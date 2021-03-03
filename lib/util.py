@@ -6,13 +6,13 @@ ADDON_ID = 'service.xbmc.tts'
 T = xbmcaddon.Addon(ADDON_ID).getLocalizedString
 XT = xbmc.getLocalizedString
 
-LOG_PATH = os.path.join(xbmc.translatePath('special://logpath').decode('utf-8'),'xbmc.log')
+LOG_PATH = os.path.join(xbmc.translatePath('special://logpath'),'xbmc.log')
 
-DISABLE_PATH = os.path.join(xbmc.translatePath('special://profile').decode('utf-8'), 'addon_data', ADDON_ID, 'DISABLED')
-ENABLE_PATH = os.path.join(xbmc.translatePath('special://profile').decode('utf-8'), 'addon_data', ADDON_ID, 'ENABLED')
+DISABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', ADDON_ID, 'DISABLED')
+ENABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', ADDON_ID, 'ENABLED')
 
 def ERROR(txt,hide_tb=False,notify=False):
-    if isinstance (txt,str): txt = txt.decode("utf-8")
+    #if isinstance (txt,str): txt = txt.decode("utf-8")
     short = str(sys.exc_info()[1])
     if hide_tb:
         LOG('ERROR: {0} - {1}'.format(txt,short))
@@ -29,7 +29,7 @@ def ERROR(txt,hide_tb=False,notify=False):
 
 def LOG(message):
     message = '{0}: {1}'.format(ADDON_ID,message)
-    xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGNOTICE)
+    xbmc.log(msg=message, level=xbmc.LOGINFO)
 
 def DEBUG_LOG(message):
     if not DEBUG:
@@ -45,7 +45,7 @@ def sleep(ms):
     xbmc.sleep(ms)
 
 def abortRequested():
-    return xbmc.abortRequested
+    return xbmc.Monitor().abortRequested()
 
 def info(key):
     return xbmcaddon.Addon(ADDON_ID).getAddonInfo(key)
@@ -54,19 +54,19 @@ def configDirectory():
     return profileDirectory()
 
 def profileDirectory():
-    return xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('profile')).decode('utf-8')
+    return xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('profile'))
 
 def addonPath():
-    addonPath = os.path.join(xbmc.translatePath('special://home').decode('utf-8'),'addons',ADDON_ID)
+    addonPath = os.path.join(xbmc.translatePath('special://home'),'addons',ADDON_ID)
     if not os.path.exists(addonPath):
-        addonPath = os.path.join(xbmc.translatePath('special://xbmc').decode('utf-8'),'addons',ADDON_ID)
+        addonPath = os.path.join(xbmc.translatePath('special://xbmc'),'addons',ADDON_ID)
 
     assert os.path.exists(addonPath), 'Addon path resolution failure'
 
     return addonPath
 
 def backendsDirectory():
-    return os.path.join(xbmc.translatePath(info('path')).decode('utf-8'),'lib','backends')
+    return os.path.join(xbmc.translatePath(info('path')),'lib','backends')
 
 def tailXBMCLog(num_lines=10):
     with open(LOG_PATH, "r") as f:
@@ -85,10 +85,10 @@ def getTmpfs():
 def playSound(name,return_duration=False):
     wavPath = os.path.join(addonPath(), 'resources','wavs','{0}.wav'.format(name))
     # This doesn't work as this may be called when the addon is disabled
-    # wavPath = os.path.join(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')).decode('utf-8'),'resources','wavs','{0}.wav'.format(name))
+    # wavPath = os.path.join(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')),'resources','wavs','{0}.wav'.format(name))
     xbmc.playSFX(wavPath)
     if return_duration:
-        wavPath = wavPath.decode('utf-8')
+        wavPath = wavPath
         if not os.path.exists(wavPath): return 0
         import wave
         w = wave.open(wavPath,'rb')
@@ -103,7 +103,7 @@ def stopSounds():
 
 def showNotification(message,time_ms=3000,icon_path=None,header='XBMC TTS'):
     try:
-        icon_path = icon_path or xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('icon')).decode('utf-8')
+        icon_path = icon_path or xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('icon'))
         xbmc.executebuiltin('Notification({0},{1},{2},{3})'.format(header,message,time_ms,icon_path))
     except RuntimeError: #Happens when disabling the addon
         LOG(message)
@@ -215,7 +215,7 @@ def isOpenElec():
     return xbmc.getCondVisibility('System.HasAddon(os.openelec.tv)')
 
 def isPreInstalled():
-    kodiPath = xbmc.translatePath('special://xbmc').decode('utf-8')
+    kodiPath = xbmc.translatePath('special://xbmc')
     preInstalledPath = os.path.join(kodiPath, 'addons', ADDON_ID)
     return os.path.exists(preInstalledPath)
 
@@ -311,10 +311,10 @@ def runInThread(func,args=(),name='?'):
 BASE_COMMAND = 'XBMC.NotifyAll(service.xbmc.tts,SAY,"{{\\"text\\":\\"{0}\\",\\"interrupt\\":{1}}}")'
 
 def safeEncode(text):
-    return binascii.hexlify(text.encode('utf-8'))
+    return binascii.hexlify(text)
 
 def safeDecode(enc_text):
-    return binascii.unhexlify(enc_text).decode('utf-8')
+    return binascii.unhexlify(enc_text)
 
 def notifySayText(text,interrupt=False):
     assert isinstance(text,str), "Not Unicode"

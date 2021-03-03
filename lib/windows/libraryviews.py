@@ -14,8 +14,8 @@ class VideoLibraryWindowReader(base.DefaultWindowReader):
         if not text: return base.DefaultWindowReader.getControlText(self,controlID)
         status = ''
         if xbmc.getCondVisibility('ListItem.IsResumable'):
-            status = ': {0}'.format(util.T(32199).decode('utf-8'))
+            status = ': {0}'.format(util.T(32199))
         else:
             if xbmc.getInfoLabel('ListItem.Overlay') == 'OverlayWatched.png':
-                status = ': {0}'.format(util.T(32198).decode('utf-8'))
-        return ('{0}{1}'.format(text.decode('utf-8'),status),text)
+                status = ': {0}'.format(util.T(32198))
+        return ('{0}{1}'.format(text,status),text)

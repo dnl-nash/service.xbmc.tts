@@ -47,13 +47,13 @@ class WindowReaderBase(WindowHandlerBase):
     def getControlDescription(self,controlID): return None
 
     def getControlText(self,controlID):
-        text = xbmc.getInfoLabel('System.CurrentControl').decode('utf-8')
+        text = xbmc.getInfoLabel('System.CurrentControl')
         return (text,text)
 
     def getControlPostfix(self, controlID, ):
         if not self.service.speakListCount:
             return ''
-        numItems = xbmc.getInfoLabel('Container({0}).NumItems'.format(self.service.controlID)).decode('utf-8')
+        numItems = xbmc.getInfoLabel('Container({0}).NumItems'.format(self.service.controlID))
         if numItems:
             return '... {0} {1}'.format(numItems,numItems != '1' and util.T(32107) or util.T(32106))
         return ''
@@ -79,13 +79,13 @@ class WindowReaderBase(WindowHandlerBase):
     def getSlideoutText(self,controlID):
         text = self.getSettingControlText(controlID)
         if not text: return ('','')
-        return (text.decode('utf-8'),text)
+        return (text,text)
 
 class DefaultWindowReader(WindowReaderBase):
     ID = 'default'
 
     def getHeading(self):
-        return xbmc.getInfoLabel('Control.GetLabel(1)').decode('utf-8') or ''
+        return xbmc.getInfoLabel('Control.GetLabel(1)') or ''
 
     def getWindowTexts(self):
         return guitables.getWindowTexts(self.winID)
@@ -104,18 +104,18 @@ class DefaultWindowReader(WindowReaderBase):
         if not text: text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
         compare = text + xbmc.getInfoLabel('ListItem.StartTime') + xbmc.getInfoLabel('ListItem.EndTime')
-        return (text.decode('utf-8'),compare)
+        return (text,compare)
 
     def getSecondaryText(self):
         return guitables.getListItemProperty(self.winID)
 
     def getItemExtraTexts(self,controlID):
         text = guitables.getItemExtraTexts(self.winID)
-        if not text: text = xbmc.getInfoLabel('ListItem.Plot').decode('utf-8')
-        if not text: text = xbmc.getInfoLabel('Container.ShowPlot').decode('utf-8')
-        if not text: text = xbmc.getInfoLabel('ListItem.Property(Artist_Description)').decode('utf-8')
-        if not text: text = xbmc.getInfoLabel('ListItem.Property(Album_Description)').decode('utf-8')
-        if not text: text = xbmc.getInfoLabel('ListItem.Property(Addon.Description)').decode('utf-8')
+        if not text: text = xbmc.getInfoLabel('ListItem.Plot')
+        if not text: text = xbmc.getInfoLabel('Container.ShowPlot')
+        if not text: text = xbmc.getInfoLabel('ListItem.Property(Artist_Description)')
+        if not text: text = xbmc.getInfoLabel('ListItem.Property(Album_Description)')
+        if not text: text = xbmc.getInfoLabel('ListItem.Property(Addon.Description)')
         if not text: text = guitables.getSongInfo()
         if not text: text = parseItemExtra(controlID,self.getControlText(controlID)[0])
         if not text: return None

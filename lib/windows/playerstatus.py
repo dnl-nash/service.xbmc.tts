@@ -28,7 +28,7 @@ class PlayerStatus(WindowHandlerBase):
         else:
             st = xbmc.getInfoLabel('Player.Time')
             if not isSpeaking and self.updateProgress(st):
-                return st.decode('utf-8')
+                return st
 
     def getMonitoredText(self,isSpeaking=False):
         #print "%s %s %s" % (xbmc.getCondVisibility('Player.Playing'),xbmc.getCondVisibility('Player.Forwarding'),xbmc.getCondVisibility('Player.Paused'))
@@ -44,10 +44,10 @@ class PlayerStatus(WindowHandlerBase):
                 else:
                     pct = xbmc.getInfoLabel('Player.CacheLevel')
                     if not isSpeaking and self.updateProgress(pct):
-                        return pct.decode('utf-8')
+                        return pct
             elif xbmc.getCondVisibility('!Player.Seeking + !Player.DisplayAfterSeek'):
                 if self.updateMode('paused'):
-                    return '{0}... {1} {2}'.format(util.XT(112),util.XT(143), xbmc.getInfoLabel('$INFO[MusicPlayer.Artist,$LOCALIZE[557]: ,:] $INFO[Player.Title,$LOCALIZE[369]: ,:]').decode('utf-8'))
+                    return '{0}... {1} {2}'.format(util.XT(112),util.XT(143), xbmc.getInfoLabel('$INFO[MusicPlayer.Artist,$LOCALIZE[557]: ,:] $INFO[Player.Title,$LOCALIZE[369]: ,:]'))
             elif xbmc.getCondVisibility('Player.DisplayAfterSeek'):
                 return self.seek(isSpeaking)
         elif xbmc.getCondVisibility('Player.Forwarding'):

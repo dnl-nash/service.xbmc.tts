@@ -27,7 +27,7 @@ class VideoInfoDialogReader(base.DefaultWindowReader):
         }
 
     def getHeading(self):
-        return xbmc.getInfoLabel('ListItem.Title').decode('utf-8') or ''
+        return xbmc.getInfoLabel('ListItem.Title') or ''
 
     def getControlText(self,controlID):
         if not controlID: return ('','')
@@ -43,13 +43,13 @@ class VideoInfoDialogReader(base.DefaultWindowReader):
         elif controlID == 61:
             text = '{0}: {1}'.format(xbmc.getLocalizedString(207),xbmc.getInfoLabel('ListItem.Plot'))
         elif controlID == 138:
-            text = xbmc.getInfoLabel('ListItem.Plot').decode('utf-8')
+            text = xbmc.getInfoLabel('ListItem.Plot')
         else:
             text = xbmc.getInfoLabel('Control.GetLabel({0})'.format(controlID))
 
         if not text: text = xbmc.getInfoLabel('System.CurrentControl')
         if not text: return ('','')
-        return (text.decode('utf-8'),text)
+        return (text,text)
 
     def getControlPostfix(self, controlID):
         post = base.DefaultWindowReader.getControlPostfix(self, self.service.controlID)

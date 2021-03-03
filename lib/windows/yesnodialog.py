@@ -7,7 +7,7 @@ class YesNoDialogReader(WindowReaderBase):
     ID = 'yesnodialog'
 
     def getControlText(self,controlID):
-        text = xbmc.getInfoLabel('System.CurrentControl').decode('utf-8')
+        text = xbmc.getInfoLabel('System.CurrentControl')
         return (text,text)
     
     def getHeading(self):

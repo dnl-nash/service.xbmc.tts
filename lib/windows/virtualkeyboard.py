@@ -22,7 +22,7 @@ class VirtualKeyboardReader(WindowReaderBase):
         self.lastRead = None
 
     def getHeading(self):
-        return xbmc.getInfoLabel('Control.GetLabel(311)').decode('utf-8')
+        return xbmc.getInfoLabel('Control.GetLabel(311)')
 
     def isIP(self,text=None):
         text = text or self.getEditText()
@@ -30,7 +30,7 @@ class VirtualKeyboardReader(WindowReaderBase):
 
     def getEditText(self):
         info = 'Control.GetLabel({0}).index(1)'.format(self.editID)
-        return xbmc.getInfoLabel(info).decode('utf-8')
+        return xbmc.getInfoLabel(info)
 #        t = xbmc.getInfoLabel(info).decode('utf-8')
 #        if t == info: return '' #To handle pre GetLabel().index() addition
 #        return t
@@ -93,9 +93,9 @@ class PVRSGuideSearchDialogReader(VirtualKeyboardReader):
     def getControlText(self,controlID):
         ID = self.window().getFocusId()
         if ID == 9:
-            text = xbmc.getLocalizedString(19133).decode('utf-8')
+            text = xbmc.getLocalizedString(19133)
         else:
-            text = xbmc.getInfoLabel('System.CurrentControl').decode('utf-8')
+            text = xbmc.getInfoLabel('System.CurrentControl')
             text = text.replace('( )','{0} {1}'.format(self.service.tts.pauseInsert,util.T(32174))).replace('(*)','{0} {1}'.format(self.service.tts.pauseInsert,util.T(32173))) #For boolean settings
         return (text,text)
 
