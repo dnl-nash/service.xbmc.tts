@@ -46,13 +46,6 @@ class TTSService(xbmc.Monitor):
         self.initTTS()
         util.LOG('SERVICE STARTED :: Interval: %sms' % self.tts.interval)
 
-    def onAbortRequested(self):
-        self.stop = True
-        try:
-            self.tts._close()
-        except TTSClosedException:
-            pass
-
     @property
     def tts(self):
         if self._tts._closed: raise TTSClosedException()
@@ -120,18 +113,18 @@ class TTSService(xbmc.Monitor):
         if util.getSetting('auto_item_extra',False):
             self.autoItemExtra = util.getSetting('auto_item_extra_delay',2)
 
-    def onDatabaseScanStarted(self,database):
-        util.LOG('DB SCAN STARTED: {0} - Notifying...'.format(database))
-        self.queueNotice('{0}: {1}'.format(database,T(32100)))
+    def onScanStarted(self,library):
+        util.LOG('DB SCAN STARTED: {0} - Notifying...'.format(library))
+        self.queueNotice('{0}: {1}'.format(library,T(32100)))
 
-    def onDatabaseUpdated(self,database):
-        util.LOG('DB SCAN UPDATED: {0} - Notifying...'.format(database))
-        self.queueNotice('{0}: {1}'.format(database,T(32101)))
+    def onScanFinished(self,library):
+        util.LOG('DB SCAN UPDATED: {0} - Notifying...'.format(library))
+        self.queueNotice('{0}: {1}'.format(library,T(32101)))
 
     def onNotification(self, sender, method, data):
         if not sender == 'service.xbmc.tts': return
         self.processCommand(method.split('.',1)[-1],data) #Remove the "Other." prefix
-#        util.LOG('NOTIFY: {0} :: {1} :: {2}'.format(sender,method,data))
+        util.LOG('NOTIFY: {0} :: {1} :: {2}'.format(sender,method,data))
 #        #xbmc :: VideoLibrary.OnUpdate :: {"item":{"id":1418,"type":"episode"}}
 
     def queueNotice(self,text,interrupt=False):
@@ -155,7 +148,7 @@ class TTSService(xbmc.Monitor):
         return True
 
     def initState(self):
-        if xbmc.Monitor().abortRequested() or self.stop: return
+        if self.abortRequested() or self.stop: return
         self.winID = None
         self.windowReader = None
         self.controlID = None
@@ -225,9 +218,9 @@ class TTSService(xbmc.Monitor):
     def start(self):
         self.checkNewVersion()
         try:
-            while (not xbmc.Monitor().abortRequested()) and (not self.stop):
+            while (not self.abortRequested()) and (not self.stop):
                 #Interface reader mode
-                while self.readerOn and (not xbmc.Monitor().abortRequested()) and (not self.stop):
+                while self.readerOn and (not self.abortRequested()) and (not self.stop):
                     xbmc.sleep(self.interval)
                     try:
                         self.checkForText()
@@ -246,7 +239,7 @@ class TTSService(xbmc.Monitor):
                         self.initState() #To help keep errors from repeating on the loop
 
                 #Idle mode
-                while (not self.readerOn) and (not xbmc.Monitor().abortRequested()) and (not self.stop):
+                while (not self.readerOn) and (not self.abortRequested()) and (not self.stop):
                     try:
                         text, interrupt = self.noticeQueue.get_nowait()
                         self.sayText(text,interrupt)
@@ -276,6 +269,10 @@ class TTSService(xbmc.Monitor):
             if self.disable:
                 import enabler
                 enabler.disableAddon()
+            try:
+                self.tts._close()
+            except TTSClosedException:
+                pass
 
     def end(self):
         if util.DEBUG:
