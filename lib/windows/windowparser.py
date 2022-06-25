@@ -24,7 +24,7 @@ def getXBMCSkinPath(fname):
         addonXMLPath = os.path.join(xbmc.translatePath('special://skin'),'addon.xml')
         skinpath = ''
         if os.path.exists(addonXMLPath):
-            with open(addonXMLPath,'r') as f:
+            with open(addonXMLPath,'r',encoding='utf-8-sig') as f:
                 lines = f.readlines()
             for l in lines:
                 if 'aspect="{0}"'.format(aspect) in l:
