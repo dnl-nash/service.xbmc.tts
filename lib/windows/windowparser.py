@@ -17,19 +17,19 @@ def currentWindowIsAddon():
 
 def getXBMCSkinPath(fname):
     for res in ('720p','1080i'):
-        skinpath = os.path.join(xbmc.translatePath('special://skin'),res)
+        skinpath = os.path.join(xbmcvfs.translatePath('special://skin'),res)
         if os.path.exists(skinpath): break
     else:
         aspect = xbmc.getInfoLabel('Skin.AspectRatio')
-        addonXMLPath = os.path.join(xbmc.translatePath('special://skin'),'addon.xml')
+        addonXMLPath = os.path.join(xbmcvfs.translatePath('special://skin'),'addon.xml')
         skinpath = ''
         if os.path.exists(addonXMLPath):
-            with open(addonXMLPath,'r',encoding='utf-8-sig') as f:
+            with open(addonXMLPath,'r', encoding='utf-8-sig') as f:
                 lines = f.readlines()
             for l in lines:
                 if 'aspect="{0}"'.format(aspect) in l:
                     folder = l.split('folder="',1)[-1].split('"',1)[0]
-                    skinpath = os.path.join(xbmc.translatePath('special://skin'),folder)
+                    skinpath = os.path.join(xbmcvfs.translatePath('special://skin'),folder)
     path = os.path.join(skinpath,fname)
     if os.path.exists(path): return path
     path = os.path.join(skinpath, fname.lower())

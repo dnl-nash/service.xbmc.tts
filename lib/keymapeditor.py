@@ -4,6 +4,7 @@ from threading import Timer
 import xbmc
 import xbmcgui
 import xbmcaddon
+import xbmcvfs
 from . import util
 T = util.T
 
@@ -37,15 +38,15 @@ def processCommand(command):
 
 
 def _keymapTarget():
-    return os.path.join(xbmc.translatePath('special://userdata'), 'keymaps', 'service.xbmc.tts.keyboard.xml')
+    return os.path.join(xbmcvfs.translatePath('special://userdata'), 'keymaps', 'service.xbmc.tts.keyboard.xml')
 
 
 def _keymapSource(kind='base'):
-    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('path')), 'resources', 'keymap.{0}.xml'.format(kind))
+    return os.path.join(xbmcvfs.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('path')), 'resources', 'keymap.{0}.xml'.format(kind))
 
 
 def _keyMapDefsPath():
-    return os.path.join(xbmc.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('profile')), 'custom.keymap.defs')
+    return os.path.join(xbmcvfs.translatePath(xbmcaddon.Addon(util.ADDON_ID).getAddonInfo('profile')), 'custom.keymap.defs')
 
 
 def loadCustomKeymapDefs():
@@ -105,7 +106,6 @@ def resetKeymap():
 
 def removeKeymap():
     targetPath = _keymapTarget()
-    import xbmcvfs
     if os.path.exists(targetPath):
         xbmcvfs.delete(targetPath)
     xbmc.executebuiltin("action(reloadkeymaps)")

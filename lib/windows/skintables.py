@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc
+import xbmcvfs
 from lib import util
 quartz = {    10000:
             {    301:{'name':20342,'prefix':util.T(32175)}, #Movies
@@ -10,8 +11,14 @@ quartz = {    10000:
                 306:{'name':'X B M C','prefix':util.T(32175)},
                 312:{'name':20387,'prefix':util.T(32176)}, #Recently added tv shows
                 313:{'name':359,'prefix':util.T(32176)}, #Recently added albums
+            }, 12901:
+            {    600:{'name':'Stop','prefix':''}, # Stop
+                601:{'name':'Prev','prefix':''}, # Prev
+                602:{'name':'Rewind','prefix':''}, # Rewind
+                603:{'name':'Play / Pause','prefix':''}, # Play
+                604:{'name':'Fast forward','prefix':''}, #
+                605:{'name':'Next','prefix':''}, #
             }
-
 }
 
 skins = {    'quartz': quartz
@@ -35,7 +42,7 @@ def getControlText(winID,controlID):
 def getSkinTable():
     global CURRENT_SKIN
     import os, xbmc
-    skinPath = xbmc.translatePath('special://skin')
+    skinPath = xbmcvfs.translatePath('special://skin')
     skinName = os.path.basename(skinPath.rstrip('\/')).split('skin.',1)[-1]
     CURRENT_SKIN = skinName
     print('service.xbmc.tts: SKIN: %s' % skinName)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import os, sys, xbmc
+import os, sys, xbmc, xbmcvfs
 
 
 def main():
-    if os.path.exists(os.path.join(xbmc.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'DISABLED')):
+    if os.path.exists(os.path.join(xbmcvfs.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'DISABLED')):
         xbmc.log('service.xbmc.tts: DISABLED - NOT STARTING')
         return
 

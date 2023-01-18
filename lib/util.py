@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-import os, sys, re, xbmc, time, binascii, xbmcaddon
+import os, sys, re, xbmc, time, binascii, xbmcaddon, xbmcvfs
 
 ADDON_ID = 'service.xbmc.tts'
 
 T = xbmcaddon.Addon(ADDON_ID).getLocalizedString
 XT = xbmc.getLocalizedString
 
-LOG_PATH = os.path.join(xbmc.translatePath('special://logpath'),'xbmc.log')
+LOG_PATH = os.path.join(xbmcvfs.translatePath('special://logpath'),'xbmc.log')
 
-DISABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', ADDON_ID, 'DISABLED')
-ENABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', ADDON_ID, 'ENABLED')
+DISABLE_PATH = os.path.join(xbmcvfs.translatePath('special://profile'), 'addon_data', ADDON_ID, 'DISABLED')
+ENABLE_PATH = os.path.join(xbmcvfs.translatePath('special://profile'), 'addon_data', ADDON_ID, 'ENABLED')
 
 def ERROR(txt,hide_tb=False,notify=False):
     #if isinstance (txt,str): txt = txt.decode("utf-8")
@@ -54,19 +54,19 @@ def configDirectory():
     return profileDirectory()
 
 def profileDirectory():
-    return xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('profile'))
+    return xbmcvfs.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('profile'))
 
 def addonPath():
-    addonPath = os.path.join(xbmc.translatePath('special://home'),'addons',ADDON_ID)
+    addonPath = os.path.join(xbmcvfs.translatePath('special://home'),'addons',ADDON_ID)
     if not os.path.exists(addonPath):
-        addonPath = os.path.join(xbmc.translatePath('special://xbmc'),'addons',ADDON_ID)
+        addonPath = os.path.join(xbmcvfs.translatePath('special://xbmc'),'addons',ADDON_ID)
 
     assert os.path.exists(addonPath), 'Addon path resolution failure'
 
     return addonPath
 
 def backendsDirectory():
-    return os.path.join(xbmc.translatePath(info('path')),'lib','backends')
+    return os.path.join(xbmcvfs.translatePath(info('path')),'lib','backends')
 
 def tailXBMCLog(num_lines=10):
     with open(LOG_PATH, "r") as f:
@@ -85,7 +85,7 @@ def getTmpfs():
 def playSound(name,return_duration=False):
     wavPath = os.path.join(addonPath(), 'resources','wavs','{0}.wav'.format(name))
     # This doesn't work as this may be called when the addon is disabled
-    # wavPath = os.path.join(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')),'resources','wavs','{0}.wav'.format(name))
+    # wavPath = os.path.join(xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('path')),'resources','wavs','{0}.wav'.format(name))
     xbmc.playSFX(wavPath)
     if return_duration:
         wavPath = wavPath
@@ -103,7 +103,7 @@ def stopSounds():
 
 def showNotification(message,time_ms=3000,icon_path=None,header='XBMC TTS'):
     try:
-        icon_path = icon_path or xbmc.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('icon'))
+        icon_path = icon_path or xbmcvfs.translatePath(xbmcaddon.Addon(ADDON_ID).getAddonInfo('icon'))
         xbmc.executebuiltin('Notification({0},{1},{2},{3})'.format(header,message,time_ms,icon_path))
     except RuntimeError: #Happens when disabling the addon
         LOG(message)
@@ -215,7 +215,7 @@ def isOpenElec():
     return xbmc.getCondVisibility('System.HasAddon(os.openelec.tv)')
 
 def isPreInstalled():
-    kodiPath = xbmc.translatePath('special://xbmc')
+    kodiPath = xbmcvfs.translatePath('special://xbmc')
     preInstalledPath = os.path.join(kodiPath, 'addons', ADDON_ID)
     return os.path.exists(preInstalledPath)
 

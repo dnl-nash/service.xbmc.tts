@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import os, sys, xbmc, xbmcaddon
+import os, sys, xbmc, xbmcaddon, xbmcvfs
 
-DISABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'DISABLED')
-ENABLE_PATH = os.path.join(xbmc.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'ENABLED')
+DISABLE_PATH = os.path.join(xbmcvfs.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'DISABLED')
+ENABLE_PATH = os.path.join(xbmcvfs.translatePath('special://profile'), 'addon_data', 'service.xbmc.tts', 'ENABLED')
 
 def getXBMCVersion():
     import json
@@ -91,7 +91,7 @@ def reset():
 
 
 def isPostInstalled():
-    homePath = xbmc.translatePath('special://home')
+    homePath = xbmcvfs.translatePath('special://home')
     postInstalledPath = os.path.join(homePath, 'addons', 'service.xbmc.tts')
     return os.path.exists(postInstalledPath)
 
