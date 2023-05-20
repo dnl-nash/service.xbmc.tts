@@ -471,8 +471,8 @@ class TTSService(xbmc.Monitor):
         if not seasEp: return ''
         return seasEp.replace('S','{0} '.format(T(32108))).replace('E','{0} '.format(T(32109)))
 
-    _formatTagRE = re.compile(r'\[/?(?:CR|B|I|UPPERCASE|LOWERCASE)\](?i)')
-    _colorTagRE = re.compile(r'\[/?COLOR[^\]\[]*?\](?i)')
+    _formatTagRE = re.compile(r'(?i)\[/?(?:CR|B|I|UPPERCASE|LOWERCASE)\]')
+    _colorTagRE = re.compile(r'(?i)\[/?COLOR[^\]\[]*?\]')
     _okTagRE = re.compile(r'(^|\W|\s)OK($|\s|\W)') #Prevents saying Oklahoma
     def _cleanText(self,text):
         text = self._formatTagRE.sub('',text)

@@ -36,7 +36,7 @@ def getXBMCSkinPath(fname):
     if os.path.exists(path): return path
     return ''
 
-tagRE = re.compile(r'\[/?(?:B|I|COLOR|UPPERCASE|LOWERCASE)[^\]]*\](?i)')
+tagRE = re.compile(r'(?i)\[/?(?:B|I|COLOR|UPPERCASE|LOWERCASE)[^\]]*\]')
 varRE = re.compile(r'\$VAR\[([^\]]*)\]')
 localizeRE = re.compile(r'\$LOCALIZE\[([^\]]*)\]')
 addonRE = re.compile(r'\$ADDON\[[\w+\.]+ (\d+)\]')
